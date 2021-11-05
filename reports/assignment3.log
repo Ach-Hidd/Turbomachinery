@@ -1,0 +1,553 @@
+Traceback (most recent call last):
+  File "/opt/hostedtoolcache/Python/3.7.12/x64/lib/python3.7/site-packages/jupyter_cache/executors/utils.py", line 56, in single_nb_execution
+    record_timing=False,
+  File "/opt/hostedtoolcache/Python/3.7.12/x64/lib/python3.7/site-packages/nbclient/client.py", line 1117, in execute
+    return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
+  File "/opt/hostedtoolcache/Python/3.7.12/x64/lib/python3.7/site-packages/nbclient/util.py", line 78, in wrapped
+    return just_run(coro(*args, **kwargs))
+  File "/opt/hostedtoolcache/Python/3.7.12/x64/lib/python3.7/site-packages/nbclient/util.py", line 57, in just_run
+    return loop.run_until_complete(coro)
+  File "/opt/hostedtoolcache/Python/3.7.12/x64/lib/python3.7/asyncio/base_events.py", line 587, in run_until_complete
+    return future.result()
+  File "/opt/hostedtoolcache/Python/3.7.12/x64/lib/python3.7/site-packages/nbclient/client.py", line 559, in async_execute
+    cell, index, execution_count=self.code_cells_executed + 1
+  File "/opt/hostedtoolcache/Python/3.7.12/x64/lib/python3.7/site-packages/nbclient/client.py", line 862, in async_execute_cell
+    self._check_raise_for_error(cell, exec_reply)
+  File "/opt/hostedtoolcache/Python/3.7.12/x64/lib/python3.7/site-packages/nbclient/client.py", line 765, in _check_raise_for_error
+    raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
+nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
+------------------
+#%% Load required packages
+import sys
+import cantera as ct
+import numpy as np
+from matplotlib import pyplot as plt
+from matplotlib import cm
+
+#%% Constants
+R_gas_mol = 8314 # Universal gas constant [units: J*K^-1*kmol^-1]
+R_gas_mass = 287 # universal gas constant [units: J*K^-1*kg^-1]
+
+#%% Start
+# Power output of turbine
+power_output = 100 # units: MW 
+power_output*=1e6
+
+# Compressor and turbine polytropic efficiencies
+etap_c = 1
+etap_t = 1   
+
+# Pressure ratio
+PR = 10
+
+# Compressor inlet temperature and pressure
+T2 = 293.15 # units: K
+p2 = 101325 # units: Pa
+
+# Heat capacity ratio of air at T=293.15 K 
+gam_c = 1.4
+
+# Compressor stage
+# Specific heat capacity (heat capacity per unit mass) of mixture in compressor
+cp_c = R_gas_mass*gam_c/(gam_c-1)
+# cp_c = 1006 # units: J.kg^-1.K^-1
+# cv_c = 717 # units: J.kg^-1.K^-1
+
+# Molar mass of species [units: kg*kmol^-1]
+M_H = 1.008 
+M_C = 12.011
+M_N = 14.007
+M_O = 15.999
+M_H2 = M_H*2
+M_CH4 = M_C + M_H*4
+M_CO2 = M_C + M_O*4
+M_O2 = M_O*2
+M_N2 = M_N*2
+
+# Define volume fractions of species in air [units: -]
+f_O2 = 0.21
+f_N2 = 0.79
+
+########## PART A: ADJUST CODE HERE ##########
+
+# Equivalence ratios    
+phis = [None, None, None] # Set equivalence ratios ranging from 0.4 to 0.8
+
+# Hydrogen percentages
+H2_percentages = [None, None, None] # Set hydrogen volume percentages of the fuel ranging from 0 to 100 
+
+################# END PART A ##################
+
+# Define colors to make distinction between different mixtures based on hydrogen percentage
+colors = cm.rainbow(np.linspace(0, 1, len(H2_percentages)))
+
+#%% Premixed flame object
+class mixture_class:
+    
+    def __init__(self, phi, H2_percentage, T_u=293.15, p_u=101325):
+        
+        # Color and label for plots
+        self.color = colors[H2_percentages.index(H2_percentage)]
+        self.label = str(int(H2_percentage)) + r'$\% H_2$' 
+        
+        # Temperature and pressure of the unburnt mixture
+        self.T_u = T_u # units: K
+        self.p_u = p_u # units: Pa
+        
+        # Equivalence ratio
+        self.phi = phi
+        
+        # Hydrogen percentage of fuel
+        self.H2_percentage = H2_percentage
+        
+        # DNG percentage of fuel
+        self.CH4_percentage = 100 - self.H2_percentage
+                                  
+        # Volume fractions of fuel
+        self.f_H2 = self.H2_percentage/100
+        self.f_CH4 = self.CH4_percentage/100
+        
+        # Mass densities of fuel species
+        rho_H2 = M_H2*self.p_u/(self.T_u*R_gas_mol)
+        rho_CH4 = M_CH4*self.p_u/(self.T_u*R_gas_mol)
+        
+        # Check if volume fractions of fuel and air are correct
+        check_air = f_O2 + f_N2
+        check_fuel = self.f_H2 + self.f_CH4
+        
+        if check_air == 1.0 and round(check_fuel,3) == 1.0:
+            pass
+        else:
+            sys.exit("fuel or air composition is incorrect!")
+            
+        if round(check_fuel,3) == 1.0:
+            pass
+        else:
+            sys.exit("fuel composition is incorrect!")
+        
+        # Definition of the mixture
+        # 1. Set the reaction mechanism
+        self.gas = ct.Solution('gri30.cti')
+        
+        # 2. Define the fuel and air composition
+        fuel = {'H2':self.f_H2, 'CH4':self.f_CH4}
+        air = {'N2':f_N2/f_O2, 'O2':1.0}   
+        
+        # 3. Set the equivalence ratio
+        self.gas.set_equivalence_ratio(phi, fuel, air)
+        
+        # 4. Set the transport model
+        self.gas.transport_model= 'Multi'
+        
+        # 5. Set the unburnt mixture temperature and pressure
+        self.gas.TP = T_u, p_u
+        
+        # Unburnt mixture properties
+        self.h_u = self.gas.enthalpy_mass # units: J.kg^-1
+        self.cp_u = self.gas.cp_mass # units: J*K^-1*kg^-1
+        self.cv_u = self.gas.cv_mass # units: J*K^-1*kg^-1
+        self.rho_u = self.gas.density_mass # units: kg.m^-3
+        self.rho_u_H2 = rho_H2 # units: kg.m^-3
+        self.rho_u_CH4 = rho_CH4 # units: kg.m^-3
+        self.mu_u = self.gas.viscosity # Pa.s
+        self.nu_u = self.mu_u/self.rho_u # units: m^2.s^-1
+        self.lambda_u= self.gas.thermal_conductivity # units: W.m^-1.K^-1
+        self.alpha_u = self.lambda_u/(self.rho_u*self.cp_u) # units: m^2.s^-1
+        
+    def solve_equations(self):
+        
+        # Unburnt molar fractions
+        self.X_H2 = self.gas["H2"].X[0]
+        self.X_CH4 = self.gas["CH4"].X[0]
+        self.X_O2 = self.gas["O2"].X[0]
+        self.X_N2 = self.gas["N2"].X[0]
+        
+        # Set domain size (1D)
+        width = 0.05  # units: m
+        
+        # Create object for freely-propagating premixed flames
+        flame = ct.FreeFlame(self.gas, width=width)
+        
+        # Set the criteria used to refine one domain
+        flame.set_refine_criteria(ratio=3, slope=0.1, curve=0.1)
+        
+        # Solve the equations
+        flame.solve(loglevel=0, auto=True)
+        
+        # Result 1: Laminar flame speed
+        self.S_L0 = flame.velocity[0]*100 # units: cm.s^-1 
+        self.S_T = 10*self.S_L0/100 # units: m.s^-1 Rough estimation of the turbulent flame speed
+        
+        # Result 2: Adiabtaic flame temperature
+        self.T_ad = self.gas.T
+        
+        # Burnt mixture properties
+        self.h_b = self.gas.enthalpy_mass # units: J.kg^-1
+        self.cp_b = self.gas.cp_mass # units: J*K^-1*kg^-1
+        self.cv_b = self.gas.cv_mass # units: J*K^-1*kg^-1
+        self.rho_b = self.gas.density_mass # units: kg.m^-3
+        self.mu_b = self.gas.viscosity # Pa.s
+        self.nu_b = self.mu_b/self.rho_b # units: m^2.s^-1
+        self.lambda_b = self.gas.thermal_conductivity # units: W.m^-1.K^-1
+        self.alpha_b = self.lambda_b/(self.rho_b*self.cp_b) # units: m^2.s^-1
+        
+        # Burnt mixture molar fractions
+        self.X_CO2 = self.gas["CO2"].X[0]
+        self.X_NO = self.gas["NO"].X[0]
+        self.X_NO2 = self.gas["NO2"].X[0]
+    
+
+#%% Function to retrieve the LHV of different kind of fuels
+def heating_value(fuel):
+    """ Returns the LHV and HHV for the specified fuel """
+    T_u = 293.15
+    p_u = 101325
+    gas1 = ct.Solution('gri30.cti')
+    gas1.TP = T_u, p_u
+    gas1.set_equivalence_ratio(1.0, fuel, 'O2:1.0')
+    h1 = gas1.enthalpy_mass
+    Y_fuel = gas1[fuel].Y[0]
+
+    # complete combustion products
+    Y_products = {'CO2': gas1.elemental_mole_fraction('C'),
+                  'H2O': 0.5 * gas1.elemental_mole_fraction('H'),
+                  'N2': 0.5 * gas1.elemental_mole_fraction('N')}
+
+    gas1.TPX = None, None, Y_products
+    h2 = gas1.enthalpy_mass
+    LHV = -(h2-h1)/Y_fuel
+    return LHV
+
+# Lower Heating Values of well-known combustion fuels
+LHV_H2 = heating_value('H2')
+LHV_CH4 = heating_value('CH4')
+LHV_C2H6 = heating_value('C2H6')
+
+#%% Create list of flame objects for multiple mixtures depending on the equivalence ratio 
+# and the percentage of hydrogen in the fuel (volume based)
+
+# Initialize list for flame objects
+mixtures = []
+
+# Create flame objects and start simulations
+for phi in phis:
+    for H2_percentage in H2_percentages:
+        
+        ########## PART B: ADJUST CODE HERE ##########
+        
+        # Compressor stage 
+        # Temperature after compressor stage
+        T3 = None # units: K  
+        p3 = None # units: Pa
+        
+        # Combustor inlet temperature in K and pressure in Pa
+        T_u = T3 # units: K 
+        p_u = p3 # units: Pa
+        
+        ################# END PART B ##################
+        
+        # Combustor stage
+        # Define unburnt mixture that goes into the combustor
+        mixture = mixture_class(phi, H2_percentage, T_u, p_u)
+        
+        # Solve equations and obtain burnt mixture properties
+        mixture.solve_equations()
+        
+        # Append the mixture (with unburnt and burnt properties) to list of mixtures
+        mixtures.append(mixture)
+        
+        # Turbine stage
+        # Heat capacity ratio of mixture in turbine
+        gam_t = mixture.cp_b/mixture.cv_b
+        
+        # Turbine inlet temperature
+        T4 = mixture.T_ad
+        
+        ########## PART C: ADJUST CODE HERE ##########
+        
+        # Turbine outlet temperature
+        T5 = None
+        
+        ################# END PART C ##################
+        
+        print('mixture solved: phi=' + str(phi) + ', H2%=' + str(H2_percentage))
+        
+#%% Plots A: Laminar flame speed/adiabatic flame temperture vs equivalence ratio
+plt.close('all')
+        
+# Plot parameters
+fontsize = 12
+marker = 'o'
+markersize = 8
+linewidth = 1
+linestyle = 'None'
+
+# Figure 1: Laminar flame speed vs equivalence ratio
+fig1, ax1 = plt.subplots()
+ax1.set_xlabel(r'$\phi$ [-]', fontsize=fontsize)
+ax1.set_ylabel(r'$S_L$ [cm.s$^{-1}$]', fontsize=fontsize)
+ax1.set_xlim(0.3, 1.1)
+ax1.set_ylim(0, 250)
+ax1.set_title('Laminar flame speed vs. equivalence ratio \n $T_u=$' + str(round(T_u,2)) + ' K, $p_u$=' + str(p_u*1e-5) + ' bar')
+ax1.grid()
+
+# Figure 2: Adiabatic flame temperature vs equivalence ratio
+fig2, ax2 = plt.subplots()
+ax2.set_xlabel(r'$\phi$ [-]', fontsize=fontsize)
+ax2.set_ylabel(r'$T_{ad}$ [K]', fontsize=fontsize)
+ax2.set_xlim(0.3, 1.1)
+ax2.set_ylim(1200, 2800)
+ax2.grid()
+ax2.set_title('Adiabtic flame temperature vs. equivalence ratio \n $T_u=$' + str(round(T_u,2)) + ' K, $p_u$=' + str(p_u*1e-5) + ' bar')
+
+# Initialize list for laminar flame speeds
+S_L0_lists = [[] for i in range(len(H2_percentages))]
+# Initialize list for adiabatic flame temperatures
+T_ad_lists = [[] for i in range(len(H2_percentages))]
+
+# Fill Figure 1 and 2
+for mixture in mixtures:
+    
+    index = H2_percentages.index(mixture.H2_percentage)
+    
+    ax1.plot(mixture.phi, mixture.S_L0, ls=linestyle,  marker=marker, ms=markersize, c=mixture.color, label=mixture.label if mixture.phi == phis[0] else "")
+    ax2.plot(mixture.phi, mixture.T_ad, ls=linestyle,  marker=marker, ms=markersize, c=mixture.color, label=mixture.label if mixture.phi == phis[0] else "")
+
+    S_L0_lists[index] = np.append(S_L0_lists[index], mixture.S_L0)
+    T_ad_lists[index] = np.append(T_ad_lists[index], mixture.T_ad)
+
+# Plot polynomial fits to show trends for laminar flame speed and adiabatic flame temperature as a function of the equivalence ratio 
+if len(phis) == 1:
+    pass
+else:
+    # Create zipped lists for polynomial fits
+    lists_zipped = zip(S_L0_lists, T_ad_lists, colors)
+    
+    # Order of polynomial
+    poly_order = 3
+    
+    for (S_L0, T_ad, color) in lists_zipped:
+        # Create new array for phi
+        phis_fit = np.linspace(phis[0], phis[-1])
+        
+        # Plot 4th order polynomial fit for laminar flame speed 
+        coeff_S_L0 = np.polyfit(phis, S_L0, poly_order)
+        poly_S_L0 = np.poly1d(coeff_S_L0)
+        S_L0_fit = poly_S_L0(phis_fit)
+        ax1.plot(phis_fit, S_L0_fit, ls="--", c=color)
+        
+        # Plot 4th order polynomial fit for adiabatic flame temperature 
+        coeff_T_ad = np.polyfit(phis, T_ad, poly_order)
+        poly_T_ad = np.poly1d(coeff_T_ad)
+        T_ad_fit = poly_T_ad(phis_fit)
+        ax2.plot(phis_fit, T_ad_fit, ls="--", c=color)
+    
+#% Plots B: Fuel blend properties and emissions
+# Assume constant power (or heat input): heat_input = m_H2_dot*LHV_H2 + m_CH4_dot*LHV_CH4 = 1 (constant)
+
+# Plot parameters
+x_ticks = np.linspace(0, 100, 11)
+y_ticks = x_ticks      
+bin_width = 5
+
+# Initialize lists
+H2_fraction_heat_input, H2_fraction_mass, CH4_fraction_heat_input, CH4_fraction_mass, CO2_fraction, fuel_energy_mass = ([] for i in range(6))
+
+# Densities of hydrogen and methane of unburnt mixture
+rho_H2 = mixture.rho_u_H2
+rho_CH4 = mixture.rho_u_CH4
+
+# Reference: Amount of CO2 when H2%=0 (1 mol of CH4 == 1 mol CO2)
+Q_CO2_ref = 1 / (rho_CH4*LHV_CH4)
+
+# Hydrogen fraction in the fuel
+H2_fraction_volume = np.linspace(0, 1, 21)
+
+# Mixture calculations
+for x in H2_fraction_volume:
+    
+    # Fractions of H2 and CH4 by heat input
+    H2_part = rho_H2*LHV_H2*x
+    CH4_part = rho_CH4*LHV_CH4*(1-x)
+    H2_fraction_heat_input_i = H2_part / (H2_part + CH4_part)
+    CH4_fraction_heat_input_i = 1 - H2_fraction_heat_input_i
+    H2_fraction_heat_input = np.append(H2_fraction_heat_input, H2_fraction_heat_input_i)
+    CH4_fraction_heat_input = np.append(CH4_fraction_heat_input, CH4_fraction_heat_input_i)
+    
+    # Fraction of CO2 reduction 
+    Q_u_i = 1 / (rho_H2*LHV_H2*x + rho_CH4*LHV_CH4*(1-x))
+    Q_CH4_i = Q_u_i*(1-x)
+    Q_CO2_i = Q_CH4_i
+    CO2_fraction_i = Q_CO2_i/Q_CO2_ref
+    CO2_fraction = np.append(CO2_fraction, CO2_fraction_i)
+    
+    # Fractions of H2 and CH4 by mass
+    H2_part = rho_H2*x
+    CH4_part = rho_CH4*(1-x)
+    H2_fraction_mass_i = H2_part / (H2_part + CH4_part)
+    CH4_fraction_mass_i = 1- H2_fraction_mass_i
+    H2_fraction_mass = np.append(H2_fraction_mass, H2_fraction_mass_i)
+    CH4_fraction_mass = np.append(CH4_fraction_mass, CH4_fraction_mass_i)
+    
+    # Fuel energy content
+    fuel_energy_mass_i = (H2_fraction_mass_i*LHV_H2 + CH4_fraction_mass_i*LHV_CH4)/1e6 # units: MJ.kg^-1
+    fuel_energy_mass = np.append(fuel_energy_mass, fuel_energy_mass_i)
+    
+# Convert fractions to percentages
+CO2_percentage = 100*CO2_fraction
+CO2_reduction_percentage = 100 - CO2_percentage
+H2_percentage_volume = H2_fraction_volume*100
+CH4_percentage_heat_input = CH4_fraction_heat_input*100
+H2_percentage_heat_input = H2_fraction_heat_input*100
+H2_percentage_mass = 100*H2_fraction_mass
+CH4_percentage_mass = 100*CH4_fraction_mass
+
+# Plots
+
+fig3, ax3 = plt.subplots()
+line3_0 = ax3.plot(H2_percentage_volume, CH4_percentage_heat_input, marker=marker, color='tab:blue', label=r'$CH_{4}$')  
+ax3.set_xticks(x_ticks)
+ax3.set_yticks(y_ticks)
+ax3.set_xlabel(r'$H_{2}$% (by volume)', fontsize=fontsize)
+ax3.set_ylabel(r'$CH_{4}$% (by heat input)', fontsize=fontsize, color='tab:blue')
+ax3.set_title('Heat input vs. volume percentage for a methane/hydrogen fuel blend')
+ax3.grid()
+ax3_1 = ax3.twinx()
+line3_1 = ax3_1.plot(H2_percentage_volume, H2_percentage_heat_input, marker=marker, color='tab:orange', label=r'$H_{2}$') 
+ax3_1.set_ylabel(r'$H_{2}$% (by heat input)', fontsize=fontsize, color='tab:orange')
+lines3 = line3_0 + line3_1
+labels3 = [l.get_label() for l in lines3]
+
+
+fig4, ax4 = plt.subplots()
+ax4.plot(H2_percentage_heat_input, CO2_reduction_percentage, marker=marker) 
+ax4.set_xticks(x_ticks)
+ax4.set_yticks(y_ticks)
+ax4.set_xlabel(r'$H_{2}$% (by heat input)', fontsize=fontsize)
+ax4.set_ylabel(r'$CO_2$ reduction [%]', fontsize=fontsize)
+ax4.set_title(r'$CO_2$ emissions vs. hydrogen/methane fuel blends (heat input %)')
+ax4.grid()
+
+fig5, (ax5, ax5_1) = plt.subplots(2)
+ax5.plot(H2_percentage_volume, CO2_percentage, marker=marker)
+ax5.set_xticks(x_ticks)
+ax5.set_yticks(y_ticks)
+ax5.set_xlabel(r'$H_{2}$% (by volume)', fontsize=fontsize)
+ax5.set_ylabel(r'$CO_2$ emissions [%]', fontsize=fontsize)
+ax5.set_title(r'$CO_2$ emissions vs. hydrogen/methane fuel blends (volume %)')
+ax5.grid()
+
+for i, mixture in enumerate(mixtures):
+    if mixture.phi == phis[-1]:
+        NO_percentage_volume = mixture.X_NO*100
+        NO2_percentage_volume = mixture.X_NO2*100
+        ax5_1.bar(mixture.H2_percentage, NO_percentage_volume, bin_width, color='tab:red', label=r'$NO$' if i == 0 else "")
+        ax5_1.bar(mixture.H2_percentage, NO2_percentage_volume, bin_width, bottom=NO_percentage_volume, color='tab:blue', label=r'$NO_2$' if i == 0 else "")
+        ax5_1.set_title(r'$NO_x$ emissions for $\phi=$' + str(mixture.phi))
+        
+ax5_1.set_xlim(-5, 105)
+ax5_1.set_xticks(x_ticks)
+ax5_1.set_xlabel(r'$H_{2}$% (by volume)', fontsize=fontsize)
+ax5_1.set_ylabel(r'$NO_x$ [%]', fontsize=fontsize)
+ax5_1.grid()
+
+fig6, ax6 = plt.subplots()
+ax6.plot(H2_percentage_volume, H2_percentage_mass, marker=marker, color='tab:blue', label=r'$H_{2}$') 
+ax6.plot(H2_percentage_volume, CH4_percentage_mass, marker=marker, color='tab:orange', label=r'$CH_{4}$')
+ax6.set_xticks(x_ticks)
+ax6.set_yticks(y_ticks)
+ax6.set_xlabel(r'$H_{2}$% (by volume)', fontsize=fontsize)
+ax6.set_ylabel(r'wt.% (by mass)', fontsize=fontsize)
+ax6.set_title(r'Weight vs. volume percentage for hydrogen/methane fuel blends')
+ax6.grid()
+
+fig7, ax7 = plt.subplots()
+ax7.plot(H2_percentage_volume, fuel_energy_mass, lw=2, marker=marker, color='tab:red')
+ax7.set_xticks(x_ticks)
+ax7.set_xlabel(r'$H_{2}$% (by volume)', fontsize=fontsize)
+ax7.set_ylabel(r'Fuel energy content [MJ.kg$^{-1}$]', fontsize=fontsize)
+ax7.set_title(r'Energy content vs. volume percentage for hydrogen/methane fuel blends')
+ax7.grid()
+
+# Turn on legends
+ax1.legend()
+ax2.legend()
+ax3.legend(lines3, labels3, loc='center left')
+ax5.legend(bbox_to_anchor=(1, 1))
+ax5_1.legend(bbox_to_anchor=(1, 1))
+ax6.legend(bbox_to_anchor=(1, 1))  
+
+# Fix figures layout
+fig1.tight_layout() 
+fig2.tight_layout()    
+fig3.tight_layout() 
+fig4.tight_layout()   
+fig5.tight_layout()    
+fig6.tight_layout() 
+fig7.tight_layout() 
+
+# Uncomment to save figures as .svg
+# fig1.savefig('turbo3_1.svg')
+# fig2.savefig('turbo3_2.svg')
+# fig3.savefig('turbo3_3.svg')
+# fig4.savefig('turbo3_4.svg')
+# fig5.savefig('turbo3_5.svg')
+# fig6.savefig('turbo3_6.svg')
+# fig7.savefig('turbo3_7.svg')
+
+########## PART D: ADJUST CODE HERE ##########
+
+for mixture in mixtures:
+    
+    # Equivalence of the mixture
+    phi = mixture.phi
+    
+    # Density of the unburnt mixture (before entering the combustor)
+    rho_u = mixture.rho_u # units: kg.s^-1
+    
+    # Volumtric fractions of hydrogen and methane
+    f_H2 = mixture.f_H2
+    f_CH4 = mixture.f_CH4
+    
+    # Specific heat capacity (heat capacity per unit mass)
+    cp_t = mixture.cp_b
+    
+    # Total mass flow rate
+    m_dot = None # units: kg.s^-1
+    
+    # Velocity in the combustor
+    V = mixture.S_T # units: m.s^-1
+    
+    # Area and diameter of the combustor
+    A = None # units: m^2
+    D = None # units: m
+    
+    # ratio of mass fuel and mass air at stoichiometric conditions
+    m_f_over_m_a_stoich = None
+    
+    # Mass flow of the fuel
+    m_f_dot = None 
+    
+    # Heat input or Heat of combustion
+    Q = None # units: W
+    
+    # thermal cycle efficiency
+    eta_cycle = None
+
+    
+################# END PART D ##################
+
+------------------
+
+[0;31m---------------------------------------------------------------------------[0m
+[0;31mModuleNotFoundError[0m                       Traceback (most recent call last)
+[0;32m/tmp/ipykernel_1816/2063189513.py[0m in [0;36m<module>[0;34m[0m
+[1;32m      1[0m [0;31m#%% Load required packages[0m[0;34m[0m[0;34m[0m[0;34m[0m[0m
+[1;32m      2[0m [0;32mimport[0m [0msys[0m[0;34m[0m[0;34m[0m[0m
+[0;32m----> 3[0;31m [0;32mimport[0m [0mcantera[0m [0;32mas[0m [0mct[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m      4[0m [0;32mimport[0m [0mnumpy[0m [0;32mas[0m [0mnp[0m[0;34m[0m[0;34m[0m[0m
+[1;32m      5[0m [0;32mfrom[0m [0mmatplotlib[0m [0;32mimport[0m [0mpyplot[0m [0;32mas[0m [0mplt[0m[0;34m[0m[0;34m[0m[0m
+
+[0;31mModuleNotFoundError[0m: No module named 'cantera'
+ModuleNotFoundError: No module named 'cantera'
+
