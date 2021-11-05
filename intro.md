@@ -23,7 +23,7 @@ This course will also be followed by quite a group from industry. Unfortunately,
 
 There will be four homework assignments: **power cycles**, **blade design**, **combustion design** and **material aspects**. They are obligatory for the course. In case you pass the exam (minimum grade for exam only = 5.5), the grades for the homework assignments will be included in the final grade (60% exam, 40% homework assignments).
 
-If you have any questions upfront, please contact me: s.a.klein@tudelft.nl. 
+If you have any questions upfront, please contact me: s.a.klein@tudelft.nl.   
 
 Regards,
 
