@@ -1,0 +1,24 @@
+name: turbo_a
+channels:
+  - conda-forge
+  - cantera
+dependencies:
+  - ipython
+  - numpy
+  - jupyterlab=3
+  - jupyter
+  - spyder
+  - matplotlib
+  - ipympl
+  - scipy
+  - seaborn
+  - plotly
+  - pandas
+  - sympy
+  - ipywidgets
+  - cantera
+  - coolprop
+  - ipyvolume
+  - voila
+  - scipy
+
