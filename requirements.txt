@@ -1,0 +1,11 @@
+jupyter-book>=0.7.0b
+matplotlib
+numpy
+ipython
+altair
+bokeh
+plotly
+vega-datasets
+ipyvolume
+scipy
+vega_datasets

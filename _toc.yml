@@ -1,0 +1,18 @@
+# Table of contents
+# Learn more at https://jupyterbook.org/customize/toc.html
+
+format: jb-book
+root: intro
+parts:
+  - caption: Recorded lectures
+    chapters:
+    - file: lectures_2021  
+  
+  - caption: Assignments
+    chapters:
+    - file: run_code_guide
+    - file: assignment1
+    - file: assignment2       
+    - file: assignment3
+    - file: assignment4
+    - file: test_notebook
