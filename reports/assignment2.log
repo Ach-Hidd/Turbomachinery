@@ -79,15 +79,9 @@ for j in range(0, nb):
     rotor_surf_list.append(rotor_surf)
     rotor_frame_list.append(rotor_frame)
 
-# print(quiver)
-
 from ipywidgets import FloatSlider, ColorPicker, VBox, jslink
 color_stator = ColorPicker(value='red', description='Color stator')
 color_rotor = ColorPicker(value='blue', description='Color rotor')
-
-size = FloatSlider(min=0, max=30, step=0.1)
-
-jslink((quiver, 'x'), (size, 'value'))
 
 for k in range(0, nb):
     jslink((stator_surf_list[k], 'color'), (color_stator, 'value'))
@@ -101,13 +95,11 @@ VBox([ipv.gcc(), size, color_stator, color_rotor])
 
 [0;31m---------------------------------------------------------------------------[0m
 [0;31mNameError[0m                                 Traceback (most recent call last)
-[0;32m/tmp/ipykernel_2645/2469470738.py[0m in [0;36m<module>[0;34m[0m
-[1;32m     69[0m [0msize[0m [0;34m=[0m [0mFloatSlider[0m[0;34m([0m[0mmin[0m[0;34m=[0m[0;36m0[0m[0;34m,[0m [0mmax[0m[0;34m=[0m[0;36m30[0m[0;34m,[0m [0mstep[0m[0;34m=[0m[0;36m0.1[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
-[1;32m     70[0m [0;34m[0m[0m
-[0;32m---> 71[0;31m [0mjslink[0m[0;34m([0m[0;34m([0m[0mquiver[0m[0;34m,[0m [0;34m'x'[0m[0;34m)[0m[0;34m,[0m [0;34m([0m[0msize[0m[0;34m,[0m [0;34m'value'[0m[0;34m)[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
-[0m[1;32m     72[0m [0;34m[0m[0m
-[1;32m     73[0m [0;32mfor[0m [0mk[0m [0;32min[0m [0mrange[0m[0;34m([0m[0;36m0[0m[0;34m,[0m [0mnb[0m[0;34m)[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
-
-[0;31mNameError[0m: name 'quiver' is not defined
-NameError: name 'quiver' is not defined
+[0;32m/tmp/ipykernel_3053/1193064602.py[0m in [0;36m<module>[0;34m[0m
+[1;32m     71[0m     [0mjslink[0m[0;34m([0m[0;34m([0m[0mrotor_frame_list[0m[0;34m[[0m[0mk[0m[0;34m][0m[0;34m,[0m [0;34m'color'[0m[0;34m)[0m[0;34m,[0m [0;34m([0m[0mcolor_rotor[0m[0;34m,[0m [0;34m'value'[0m[0;34m)[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     72[0m [0;34m[0m[0m
+[0;32m---> 73[0;31m [0mVBox[0m[0;34m([0m[0;34m[[0m[0mipv[0m[0;34m.[0m[0mgcc[0m[0;34m([0m[0;34m)[0m[0;34m,[0m [0msize[0m[0;34m,[0m [0mcolor_stator[0m[0;34m,[0m [0mcolor_rotor[0m[0;34m][0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m
+[0;31mNameError[0m: name 'size' is not defined
+NameError: name 'size' is not defined
 

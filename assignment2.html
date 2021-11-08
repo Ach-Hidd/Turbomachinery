@@ -430,9 +430,9 @@ Deliver a report: Around 4 pages. Group of 2 students.</p>
 </div>
 <div class="cell_output docutils container">
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "854eb14126d54fc99a30cac4b32c6282"}
+{"version_major": 2, "version_minor": 0, "model_id": "b29d10c209ed413aac8ae8b8899711fa"}
 </script><script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "f7b5d19b9a264ed1acc3ec004e0b1b25"}
+{"version_major": 2, "version_minor": 0, "model_id": "74b4fbb6cb2d4b80b5ee94146cb62c6e"}
 </script></div>
 </div>
 <p><strong>Function 3D blade design:</strong></p>
@@ -500,15 +500,9 @@ Deliver a report: Around 4 pages. Group of 2 students.</p>
     <span class="n">rotor_surf_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rotor_surf</span><span class="p">)</span>
     <span class="n">rotor_frame_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rotor_frame</span><span class="p">)</span>
 
-<span class="c1"># print(quiver)</span>
-
 <span class="kn">from</span> <span class="nn">ipywidgets</span> <span class="kn">import</span> <span class="n">FloatSlider</span><span class="p">,</span> <span class="n">ColorPicker</span><span class="p">,</span> <span class="n">VBox</span><span class="p">,</span> <span class="n">jslink</span>
 <span class="n">color_stator</span> <span class="o">=</span> <span class="n">ColorPicker</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Color stator&#39;</span><span class="p">)</span>
 <span class="n">color_rotor</span> <span class="o">=</span> <span class="n">ColorPicker</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Color rotor&#39;</span><span class="p">)</span>
-
-<span class="n">size</span> <span class="o">=</span> <span class="n">FloatSlider</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
-
-<span class="n">jslink</span><span class="p">((</span><span class="n">quiver</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">),</span> <span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">))</span>
 
 <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">nb</span><span class="p">):</span>
     <span class="n">jslink</span><span class="p">((</span><span class="n">stator_surf_list</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="s1">&#39;color&#39;</span><span class="p">),</span> <span class="p">(</span><span class="n">color_stator</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">))</span>
@@ -523,14 +517,12 @@ Deliver a report: Around 4 pages. Group of 2 students.</p>
 <div class="cell_output docutils container">
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
 <span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">ipykernel_2645</span><span class="o">/</span><span class="mf">2469470738.</span><span class="n">py</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-<span class="g g-Whitespace">     </span><span class="mi">69</span> <span class="n">size</span> <span class="o">=</span> <span class="n">FloatSlider</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">70</span> 
-<span class="ne">---&gt; </span><span class="mi">71</span> <span class="n">jslink</span><span class="p">((</span><span class="n">quiver</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">),</span> <span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">))</span>
+<span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">ipykernel_3053</span><span class="o">/</span><span class="mf">1193064602.</span><span class="n">py</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="g g-Whitespace">     </span><span class="mi">71</span>     <span class="n">jslink</span><span class="p">((</span><span class="n">rotor_frame_list</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="s1">&#39;color&#39;</span><span class="p">),</span> <span class="p">(</span><span class="n">color_rotor</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">))</span>
 <span class="g g-Whitespace">     </span><span class="mi">72</span> 
-<span class="g g-Whitespace">     </span><span class="mi">73</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">nb</span><span class="p">):</span>
+<span class="ne">---&gt; </span><span class="mi">73</span> <span class="n">VBox</span><span class="p">([</span><span class="n">ipv</span><span class="o">.</span><span class="n">gcc</span><span class="p">(),</span> <span class="n">size</span><span class="p">,</span> <span class="n">color_stator</span><span class="p">,</span> <span class="n">color_rotor</span><span class="p">])</span>
 
-<span class="ne">NameError</span>: name &#39;quiver&#39; is not defined
+<span class="ne">NameError</span>: name &#39;size&#39; is not defined
 </pre></div>
 </div>
 </div>
