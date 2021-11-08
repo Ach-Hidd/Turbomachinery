@@ -101,7 +101,7 @@ VBox([ipv.gcc(), size, color_stator, color_rotor])
 
 [0;31m---------------------------------------------------------------------------[0m
 [0;31mNameError[0m                                 Traceback (most recent call last)
-[0;32m/tmp/ipykernel_2595/2469470738.py[0m in [0;36m<module>[0;34m[0m
+[0;32m/tmp/ipykernel_2645/2469470738.py[0m in [0;36m<module>[0;34m[0m
 [1;32m     69[0m [0msize[0m [0;34m=[0m [0mFloatSlider[0m[0;34m([0m[0mmin[0m[0;34m=[0m[0;36m0[0m[0;34m,[0m [0mmax[0m[0;34m=[0m[0;36m30[0m[0;34m,[0m [0mstep[0m[0;34m=[0m[0;36m0.1[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
 [1;32m     70[0m [0;34m[0m[0m
 [0;32m---> 71[0;31m [0mjslink[0m[0;34m([0m[0;34m([0m[0mquiver[0m[0;34m,[0m [0;34m'x'[0m[0;34m)[0m[0;34m,[0m [0;34m([0m[0msize[0m[0;34m,[0m [0;34m'value'[0m[0;34m)[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
