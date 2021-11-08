@@ -47,7 +47,7 @@ show(p)
 
 [0;31m---------------------------------------------------------------------------[0m
 [0;31mNameError[0m                                 Traceback (most recent call last)
-[0;32m/tmp/ipykernel_2994/3078122710.py[0m in [0;36m<module>[0;34m[0m
+[0;32m/tmp/ipykernel_2696/3078122710.py[0m in [0;36m<module>[0;34m[0m
 [1;32m     12[0m [0;34m[0m[0m
 [1;32m     13[0m [0;31m# p = figure(title="E Lz space", tools='lasso_select', width=500, height=500)[0m[0;34m[0m[0;34m[0m[0;34m[0m[0m
 [0;32m---> 14[0;31m [0mr[0m [0;34m=[0m [0mp[0m[0;34m.[0m[0mcircle[0m[0;34m([0m[0;34m'x'[0m[0;34m,[0m [0;34m'y'[0m[0;34m,[0m [0msource[0m[0;34m=[0m[0mdata_source[0m[0;34m,[0m [0mcolor[0m[0;34m=[0m[0;34m"navy"[0m[0;34m,[0m [0malpha[0m[0;34m=[0m[0;36m0.2[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
