@@ -95,7 +95,7 @@ VBox([ipv.gcc(), size, color_stator, color_rotor])
 
 [0;31m---------------------------------------------------------------------------[0m
 [0;31mNameError[0m                                 Traceback (most recent call last)
-[0;32m/tmp/ipykernel_3053/1193064602.py[0m in [0;36m<module>[0;34m[0m
+[0;32m/tmp/ipykernel_3096/1193064602.py[0m in [0;36m<module>[0;34m[0m
 [1;32m     71[0m     [0mjslink[0m[0;34m([0m[0;34m([0m[0mrotor_frame_list[0m[0;34m[[0m[0mk[0m[0;34m][0m[0;34m,[0m [0;34m'color'[0m[0;34m)[0m[0;34m,[0m [0;34m([0m[0mcolor_rotor[0m[0;34m,[0m [0;34m'value'[0m[0;34m)[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
 [1;32m     72[0m [0;34m[0m[0m
 [0;32m---> 73[0;31m [0mVBox[0m[0;34m([0m[0;34m[[0m[0mipv[0m[0;34m.[0m[0mgcc[0m[0;34m([0m[0;34m)[0m[0;34m,[0m [0msize[0m[0;34m,[0m [0mcolor_stator[0m[0;34m,[0m [0mcolor_rotor[0m[0;34m][0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
