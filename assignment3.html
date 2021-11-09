@@ -304,8 +304,8 @@ The inlet temperature <span class="math notranslate nohighlight">\(T_2\)</span> 
 <p>PR = 10 if (numpy.mod(studentID, 2) + 1) == 1<br>
 PR = 20 if (numpy.mod(studentID, 2) + 1) == 2</p>
 <p>Assume the TIT to be equal to the temperature of the flame inside the combustor. The flame temperature depends on the equivalence ratio (<span class="math notranslate nohighlight">\(\phi\)</span>), the hydrogen volume percentage of the fuel (<span class="math notranslate nohighlight">\(H_2\%\)</span>) and the combustor inlet temperature and pressure. For now consider the fuel to consist of pure natural gas (<span class="math notranslate nohighlight">\(H_2\%=0\)</span>). Note that the equivalence ratio is given by:</p>
-<div class="amsmath math notranslate nohighlight" id="equation-3e13e986-9f3f-4b06-8fa1-8bfc3fc06c7a">
-<span class="eqno">(1)<a class="headerlink" href="#equation-3e13e986-9f3f-4b06-8fa1-8bfc3fc06c7a" title="Permalink to this equation">¶</a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-587ebb5f-54bc-4dc0-a3b2-884692e3f84a">
+<span class="eqno">(1)<a class="headerlink" href="#equation-587ebb5f-54bc-4dc0-a3b2-884692e3f84a" title="Permalink to this equation">¶</a></span>\[\begin{align}
 \phi = \frac{\frac{m_{fuel}}{m_{air}}}{(\frac{m_{fuel}}{m_{air}})_{stoich}}
 \end{align}\]</div>
 <p><strong>1. Calculate the inlet temperature <span class="math notranslate nohighlight">\(T_3\)</span> and inlet pressure <span class="math notranslate nohighlight">\(p_3\)</span> of the combustor and determine the required equivalence ratio (adjust PART A and PART B and run the code), so that the TIT specification is met.</strong> <br></p>
@@ -861,7 +861,7 @@ For more background information regarding the 1D flame simulation visti: https:/
 <div class="cell_output docutils container">
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
 <span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
-<span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">ipykernel_2980</span><span class="o">/</span><span class="mf">2063189513.</span><span class="n">py</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">ipykernel_2908</span><span class="o">/</span><span class="mf">2063189513.</span><span class="n">py</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
 <span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1">#%% Load required packages</span>
 <span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">import</span> <span class="nn">sys</span>
 <span class="ne">----&gt; </span><span class="mi">3</span> <span class="kn">import</span> <span class="nn">cantera</span> <span class="k">as</span> <span class="nn">ct</span>
