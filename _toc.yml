@@ -15,4 +15,4 @@ parts:
     - file: assignment2       
     - file: assignment3
     - file: assignment4
-    - file: test_notebook
+    #- file: test_notebook
