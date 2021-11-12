@@ -12,7 +12,7 @@ parts:
     chapters:
     - file: run_code_guide
     - file: assignment1
-    - file: assignment2       
-    - file: assignment3
-    - file: assignment4
-    - file: test_notebook
+    # - file: assignment2       
+    # - file: assignment3
+    # - file: assignment4
+    # - file: test_notebook
