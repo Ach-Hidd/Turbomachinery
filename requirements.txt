@@ -9,3 +9,4 @@ vega-datasets
 ipyvolume
 scipy
 vega_datasets
+coolprop
