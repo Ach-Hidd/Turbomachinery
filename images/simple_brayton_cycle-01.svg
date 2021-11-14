@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 25.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 909 404" style="enable-background:new 0 0 909 404;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#A5A5A5;stroke:#000000;stroke-width:2.6667;stroke-miterlimit:8;}
+	.st1{fill:#FFFFFF;}
+	.st2{font-family:'ArialMT';}
+	.st3{font-size:24px;}
+	.st4{fill:#4472C4;}
+	.st5{fill:#ED7D31;}
+	.st6{fill:none;stroke:#000000;stroke-width:2.6667;stroke-miterlimit:8;}
+	.st7{fill:#70AD47;}
+	.st8{fill:none;stroke:#4472C4;stroke-width:4;stroke-miterlimit:8;}
+	.st9{fill-rule:evenodd;clip-rule:evenodd;fill:#4472C4;stroke:#000000;stroke-width:2.6667;stroke-miterlimit:8;}
+	.st10{fill-rule:evenodd;clip-rule:evenodd;fill:#ED7D31;stroke:#000000;stroke-width:2.6667;stroke-miterlimit:8;}
+	.st11{fill-rule:evenodd;clip-rule:evenodd;fill:#FFC000;stroke:#000000;stroke-width:2.6667;stroke-miterlimit:8;}
+</style>
+<g>
+	<g transform="translate(-203 -69)">
+		<rect x="408.8" y="262.6" class="st0" width="407" height="30"/>
+		<text transform="matrix(1 0 0 1 587.7068 284.1069)" class="st1 st2 st3">shaft</text>
+		<path class="st4" d="M233.8,456.6l0-84h-4l0,84L233.8,456.6z M237.8,374.6l-6-12l-6,12H237.8z"/>
+		<path class="st4" d="M404.9,233.3v-61.2h209.6v4H406.9l2-2v59.2H404.9z M526.4,167.9l12,6l-12,6V167.9z"/>
+		<path d="M993.8,349.6v85.1h-4v-85.1H993.8z M996.8,432.7l-6,12l-6-12H996.8z"/>
+		<path class="st5" d="M598.2,172.7h219.6v51.2h-4v-49.2l2,2H598.2V172.7z M821.8,221.9l-6,12l-6-12H821.8z"/>
+		<path class="st6" d="M247.8,409.6c0-13.3,10.7-24,24-24s24,10.7,24,24s-10.7,24-24,24S247.8,422.9,247.8,409.6z"/>
+		<text transform="matrix(1 0 0 1 264.4198 417.1069)" class="st2 st3">2</text>
+		<path class="st6" d="M353.8,143.1c0-13.3,10.7-24,24-24s24,10.7,24,24c0,13.3-10.7,24-24,24S353.8,156.4,353.8,143.1z"/>
+		<text transform="matrix(1 0 0 1 370.9305 149.6069)" class="st2 st3">3</text>
+		<path class="st6" d="M1008.3,424.1c0-13.3,10.7-24,24-24c13.3,0,24,10.7,24,24s-10.7,24-24,24
+			C1019,448.1,1008.3,437.4,1008.3,424.1z"/>
+		<text transform="matrix(1 0 0 1 1025.9878 431.6391)" class="st2 st3">5</text>
+		<path class="st6" d="M809.8,137.1c0-13.3,10.7-24,24-24s24,10.7,24,24s-10.7,24-24,24S809.8,150.4,809.8,137.1z"/>
+		<text transform="matrix(1 0 0 1 827.0558 143.6069)" class="st2 st3">4</text>
+		<rect x="992.8" y="262.6" class="st0" width="31" height="30"/>
+		<path class="st7" d="M1023.8,280.6l55.6-0.5l-0.1-6.7l-55.6,0.5L1023.8,280.6z M1076.1,286.8l19.9-10.2l-20.1-9.8L1076.1,286.8z"
+			/>
+		<text transform="matrix(1 0 0 1 1056.3698 413.1069)" class="st2 st3"> </text>
+		<path class="st4" d="M474.3,135.1H528v4h-53.7V135.1z M526,131.1l12,6l-12,6V131.1z"/>
+		<path class="st8" d="M474.3,137.2l0-55.1"/>
+		<path class="st9" d="M231.8,195.6l177,41v82l-177,41V195.6z"/>
+		<text transform="matrix(1 0 0 1 246.7548 284.1069)" class="st1 st2 st3">Compressor</text>
+		<path class="st10" d="M992.8,359.6l-177-41v-82l177-41V359.6z"/>
+		<text transform="matrix(1 0 0 1 881.8358 284.1069)" class="st1 st2 st3">Turbine</text>
+		<path class="st11" d="M537.8,137.4c0-5.4,4.4-9.8,9.8-9.8H677c5.4,0,9.8,4.4,9.8,9.8v39.3c0,5.4-4.4,9.8-9.8,9.8H547.6
+			c-5.4,0-9.8-4.4-9.8-9.8V137.4z"/>
+		<text transform="matrix(1 0 0 1 558.1368 164.1069)" class="st1 st2 st3">Combustor</text>
+	</g>
+</g>
+</svg>
