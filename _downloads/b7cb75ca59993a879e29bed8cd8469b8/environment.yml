@@ -21,4 +21,5 @@ dependencies:
   - ipyvolume
   - voila
   - scipy
+  - coolprop
 
