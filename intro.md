@@ -15,7 +15,7 @@ kernelspec:
 
 Dear Students,
 
-Welcome to the Mechanical Engineering Turbomachinery Course 2021/2022.
+Welcome to the Mechanical Engineering Turbomachinery Course 2021/2022!
 
 We recommend to follow the course on the scheduled time slots. During these moments, it is possible to ask questions via the chat function. 
 
